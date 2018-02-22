@@ -7,6 +7,7 @@
 #include "../include/cairo_vis.h"
 #include "../include/frame_functions.h"
 
+/*
 void grow_circle(frame &anim, double time, int start_frame, int end_frame,
                  vec &ori, double radius, double weight){
 
@@ -805,3 +806,4 @@ void plot(frame &anim, std::vector<double> array, double time, int start_frame,
     //draw_array(anim, plot_time, array, dim.x, dim.y, arr_clr);
     
 }
+*/
