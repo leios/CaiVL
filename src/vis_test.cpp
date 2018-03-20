@@ -9,6 +9,28 @@
 
 int main(){
 
+    camera cam = camera();
+    circle cir = circle({0,0,0}, 1.0, {1, 0, 1});
+    cam.draw_circle(cir);
+    cam.image.draw_layers();
+
+
+    vec tmp = cam.size;
+    for (int i = 0; i < 100; ++i){
+        cam.size += tmp/100;
+
+        cam.draw_circle(cir);
+        cam.image.draw_layers();
+    }
+
+    for (int i = 0; i < 100; ++i){
+        cam.loc += tmp / 100;
+
+        cam.draw_circle(cir);
+        cam.image.draw_layers();
+    }
+
+/*
     color bg = {0, 0, 0, 1};
     frame test(bg, 600, 400, 1);
     test.add_layer();
@@ -16,7 +38,14 @@ int main(){
     cairo_arc(test.layers[1].frame_ctx, 200, 150, 50, 0, M_PI);
     cairo_stroke(test.layers[1].frame_ctx);
     test.draw_layers();
+
+    cairo_arc(test.layers[1].frame_ctx, 200, 150, 50, 0, 2*M_PI);
+    cairo_stroke(test.layers[1].frame_ctx);
     test.draw_layers();
+    test.draw_layers();
+    test.draw_layers();
+    test.draw_layers();
+*/
 
 /*
     vec res = {400, 300};

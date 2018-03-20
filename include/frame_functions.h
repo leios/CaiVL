@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <assert.h>
 #include "vec.h"
+#include "shape_functions.h"
 
 #define num_frames 1000
 
@@ -70,6 +71,16 @@ struct frame{
     frame(const color& bg, int x, int y, int width){
         layers.emplace_back(bg, x, y, width);
     }
+};
+
+// Struct for camera
+struct camera{
+    vec loc, size;
+    frame image;
+
+    void draw_circle(circle c);
+
+    camera() : loc({0,0,0}), size({6,4,0}), image(frame()){};
 };
 
 // Function to create basic colored background

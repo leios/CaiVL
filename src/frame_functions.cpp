@@ -92,3 +92,17 @@ void frame::clear_layers(){
         cairo_restore(layers[i].frame_ctx);
     }
 }
+
+void camera::draw_circle(circle c){
+    vec cir_loc = c.loc - loc;
+    double pixel_res = image.layers[0].res_x / size.x;
+    int cir_x = cir_loc.x*pixel_res + 0.5*image.layers[0].res_x;
+    int cir_y = cir_loc.y*pixel_res + 0.5*image.layers[0].res_y;
+
+    cairo_set_source_rgba(image.layers[0].frame_ctx, c.color.x, c.color.y, 
+                          c.color.z, 1);
+    cairo_arc(image.layers[0].frame_ctx, cir_x, cir_y, c.radius*pixel_res, 
+              0, 2*M_PI);
+    cairo_stroke(image.layers[0].frame_ctx);
+
+}
