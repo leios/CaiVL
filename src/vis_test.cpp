@@ -9,27 +9,54 @@
 
 int main(){
 
-    camera cam = camera();
-    circle cir = circle({0,0,0}, 1.0, {1, 0, 1});
-    cam.draw_circle(cir);
+    camera cam = camera({1, 1, 1, 1}, {12, 8, 0});
+    for (int i = 0; i < 6; ++i){
+        circle cir = circle({-5, 2.5 - 1*i, 0}, 0.4, {0, 0, 0}, 1);
+        cam.draw_circle(cir);
+    }
+
+    line l = line({0,0,0}, {0,1,0}, {1,0,1});
+    cam.draw_line(l);
+    
+    cam.image.draw_layers();
+/*
+    for (int i = 0; i < 10; ++i){
+        circle cir = circle({-10 + 2*i,0,0}, 1.0, {1, 0, 1});
+        cam.draw_circle(cir);
+    }
     cam.image.draw_layers();
 
 
     vec tmp = cam.size;
-    for (int i = 0; i < 100; ++i){
+    for (int i = 0; i < 200; ++i){
         cam.size += tmp/100;
 
-        cam.draw_circle(cir);
+        for (int j = 0; j < 10; ++j){
+            circle cir = circle({-10 + 2*j,0,0}, 1.0, {1, 0, 1});
+            cam.draw_circle(cir);
+        }
         cam.image.draw_layers();
     }
 
     for (int i = 0; i < 100; ++i){
-        cam.loc += tmp / 100;
-
-        cam.draw_circle(cir);
+        cam.loc.x += 2.0/10;
+        for (int j = 0; j < 100; ++j){
+            circle cir = circle({-10 + 2*j,0,0}, 1.0, {1, 0, 1});
+            cam.draw_circle(cir);
+        }
         cam.image.draw_layers();
     }
 
+    for (int i = 0; i < 200; ++i){
+        cam.size -= tmp/100;
+
+        for (int j = 0; j < 10; ++j){
+            circle cir = circle({-10 + 2*j,0,0}, 1.0, {1, 0, 1});
+            cam.draw_circle(cir);
+        }
+        cam.image.draw_layers();
+    }
+*/
 /*
     color bg = {0, 0, 0, 1};
     frame test(bg, 600, 400, 1);

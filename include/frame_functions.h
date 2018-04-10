@@ -19,7 +19,7 @@
 #include "vec.h"
 #include "shape_functions.h"
 
-#define num_frames 1000
+//#define num_frames 1000
 
 // Struct for colors
 struct color{
@@ -68,6 +68,9 @@ struct frame{
     frame(){
         layers.emplace_back(layer());
     };
+    frame(const color& bg){
+        layers.emplace_back(bg, 600, 400, 3);
+    }
     frame(const color& bg, int x, int y, int width){
         layers.emplace_back(bg, x, y, width);
     }
@@ -79,8 +82,12 @@ struct camera{
     frame image;
 
     void draw_circle(circle c);
+    void draw_line(line l);
 
     camera() : loc({0,0,0}), size({6,4,0}), image(frame()){};
+    camera(const color& bg) : loc({0,0,0}), size({6,4,0}), image(frame(bg)){};
+    camera(const color& bg, const vec& s) 
+        : loc({0,0,0}), size(s), image(frame(bg)){};
 };
 
 // Function to create basic colored background

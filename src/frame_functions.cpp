@@ -102,7 +102,38 @@ void camera::draw_circle(circle c){
     cairo_set_source_rgba(image.layers[0].frame_ctx, c.color.x, c.color.y, 
                           c.color.z, 1);
     cairo_arc(image.layers[0].frame_ctx, cir_x, cir_y, c.radius*pixel_res, 
-              0, 2*M_PI);
+              c.start_angle, c.angle);
+    if (c.draw_type == 1){
+        cairo_fill(image.layers[0].frame_ctx);
+    }
+    else{
+        cairo_stroke(image.layers[0].frame_ctx);
+    }
+
+}
+
+void camera::draw_line(line l){
+    vec loc1 = l.loc1 - loc;
+    vec loc2 = l.loc2 - loc;
+    double pixel_res = image.layers[0].res_x / size.x;
+
+    int l1_x = loc1.x*pixel_res + 0.5*image.layers[0].res_x;
+    int l1_y = loc1.y*pixel_res + 0.5*image.layers[0].res_y;
+
+    int l2_x = loc2.x*pixel_res + 0.5*image.layers[0].res_x;
+    int l2_y = loc2.y*pixel_res + 0.5*image.layers[0].res_y;
+
+    cairo_set_source_rgba(image.layers[0].frame_ctx, l.color.x, l.color.y, 
+                          l.color.z, 1);
+
+    cairo_move_to(image.layers[0].frame_ctx, l1_x, l1_y);
+    cairo_line_to(image.layers[0].frame_ctx, l2_x, l2_y);
+
+    int line_width = image.layers[0].line_width;
+    //cairo_set_line_width(image.layers[0].frame_ctx, l.line_width);
+
     cairo_stroke(image.layers[0].frame_ctx);
+
+    //cairo_set_line_width(image.layers[0].frame_ctx, line_width);
 
 }
