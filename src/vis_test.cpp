@@ -9,7 +9,7 @@
 
 int main(){
 
-    camera cam = camera({1, 1, 1, 1}, {12, 8, 0});
+    camera cam = camera({1, 1, 1, 1}, {12, 8, 0}, 1200, 800);
     for (int i = 0; i < 6; ++i){
         circle cir = circle({-5, 2.5 - 1*i, 0}, 0.4, {0, 0, 0}, 1);
         cam.draw_circle(cir);
@@ -17,6 +17,9 @@ int main(){
 
     line l = line({0,0,0}, {0,1,0}, {1,0,1});
     cam.draw_line(l);
+
+    textbox t = textbox("You are AWESOME!", {0,0,0}, {0, 0, 1}, 10);
+    cam.write_text(t, 1);
     
     cam.image.draw_layers();
 /*

@@ -94,46 +94,101 @@ void frame::clear_layers(){
 }
 
 void camera::draw_circle(circle c){
+    draw_circle(c, 0);
+}
+void camera::draw_circle(circle c, int layer){
+    while (image.layers.size() <= layer){
+        image.add_layer();
+    }
     vec cir_loc = c.loc - loc;
-    double pixel_res = image.layers[0].res_x / size.x;
-    int cir_x = cir_loc.x*pixel_res + 0.5*image.layers[0].res_x;
-    int cir_y = cir_loc.y*pixel_res + 0.5*image.layers[0].res_y;
+    double pixel_res = image.layers[layer].res_x / size.x;
+    int cir_x = cir_loc.x*pixel_res + 0.5*image.layers[layer].res_x;
+    int cir_y = cir_loc.y*pixel_res + 0.5*image.layers[layer].res_y;
 
-    cairo_set_source_rgba(image.layers[0].frame_ctx, c.color.x, c.color.y, 
+    cairo_set_source_rgba(image.layers[layer].frame_ctx, c.color.x, c.color.y, 
                           c.color.z, 1);
-    cairo_arc(image.layers[0].frame_ctx, cir_x, cir_y, c.radius*pixel_res, 
+    cairo_arc(image.layers[layer].frame_ctx, cir_x, cir_y, c.radius*pixel_res, 
               c.start_angle, c.angle);
     if (c.draw_type == 1){
-        cairo_fill(image.layers[0].frame_ctx);
+        cairo_fill(image.layers[layer].frame_ctx);
     }
     else{
-        cairo_stroke(image.layers[0].frame_ctx);
+        cairo_stroke(image.layers[layer].frame_ctx);
     }
 
 }
 
 void camera::draw_line(line l){
+    draw_line(l, 0);
+}
+void camera::draw_line(line l, int layer){
+    while (image.layers.size() <= layer){
+        image.add_layer();
+    }
     vec loc1 = l.loc1 - loc;
     vec loc2 = l.loc2 - loc;
-    double pixel_res = image.layers[0].res_x / size.x;
+    double pixel_res = image.layers[layer].res_x / size.x;
 
-    int l1_x = loc1.x*pixel_res + 0.5*image.layers[0].res_x;
-    int l1_y = loc1.y*pixel_res + 0.5*image.layers[0].res_y;
+    int l1_x = loc1.x*pixel_res + 0.5*image.layers[layer].res_x;
+    int l1_y = loc1.y*pixel_res + 0.5*image.layers[layer].res_y;
 
-    int l2_x = loc2.x*pixel_res + 0.5*image.layers[0].res_x;
-    int l2_y = loc2.y*pixel_res + 0.5*image.layers[0].res_y;
+    int l2_x = loc2.x*pixel_res + 0.5*image.layers[layer].res_x;
+    int l2_y = loc2.y*pixel_res + 0.5*image.layers[layer].res_y;
 
-    cairo_set_source_rgba(image.layers[0].frame_ctx, l.color.x, l.color.y, 
+    cairo_set_source_rgba(image.layers[layer].frame_ctx, l.color.x, l.color.y, 
                           l.color.z, 1);
 
-    cairo_move_to(image.layers[0].frame_ctx, l1_x, l1_y);
-    cairo_line_to(image.layers[0].frame_ctx, l2_x, l2_y);
+    cairo_move_to(image.layers[layer].frame_ctx, l1_x, l1_y);
+    cairo_line_to(image.layers[layer].frame_ctx, l2_x, l2_y);
 
-    int line_width = image.layers[0].line_width;
-    //cairo_set_line_width(image.layers[0].frame_ctx, l.line_width);
+    int line_width = image.layers[layer].line_width;
+    //cairo_set_line_width(image.layers[layer].frame_ctx, l.line_width);
 
-    cairo_stroke(image.layers[0].frame_ctx);
+    cairo_stroke(image.layers[layer].frame_ctx);
 
-    //cairo_set_line_width(image.layers[0].frame_ctx, line_width);
+    //cairo_set_line_width(image.layers[layer].frame_ctx, line_width);
 
+}
+
+void camera::write_text(textbox t){
+    write_text(t, 0);
+}
+void camera::write_text(textbox t, int layer){
+    while (image.layers.size() <= layer){
+        image.add_layer();
+    }
+    vec text_loc = t.loc - loc;
+    double pixel_res = image.layers[layer].res_x / size.x;
+
+    int tloc_x = text_loc.x*pixel_res + 0.5*image.layers[layer].res_x;
+    int tloc_y = text_loc.y*pixel_res + 0.5*image.layers[layer].res_y;
+
+    cairo_set_font_size(image.layers[layer].frame_ctx, t.font_size);
+
+    cairo_text_extents_t textbox;
+    cairo_text_extents(image.layers[layer].frame_ctx, t.text.c_str(), &textbox);
+
+    cairo_set_source_rgba(image.layers[layer].frame_ctx, t.color.x, t.color.y, 
+                          t.color.z, 1);
+
+    // Left justified
+    if (t.justification == 1){
+        cairo_move_to(image.layers[layer].frame_ctx, tloc_x, 
+                      tloc_y + textbox.height * 0.5);
+    }
+    // Right justified
+    else if (t.justification == 2){
+        cairo_move_to(image.layers[layer].frame_ctx, tloc_x - textbox.width, 
+                      tloc_y + textbox.height * 0.5);
+    }
+    // Center justified
+    else{
+        cairo_move_to(image.layers[layer].frame_ctx, 
+                      tloc_x - textbox.width * 0.5, 
+                      tloc_y + textbox.height * 0.5);
+    }
+
+    cairo_show_text(image.layers[layer].frame_ctx, t.text.c_str());
+
+    cairo_stroke(image.layers[layer].frame_ctx);
 }

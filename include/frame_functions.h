@@ -40,8 +40,15 @@ struct layer{
     // Simple constructor
     layer() : bg_clr(color{0,0,0,1}), res_x(600), res_y(400), line_width(3){
         init();
-    };
-
+    }
+    layer(int x, int y) :
+        bg_clr({0,0,0,1}), res_x(x), res_y(y), line_width(3){
+        init();
+    }
+    layer(const color& bg, int x, int y) :
+        bg_clr(bg), res_x(x), res_y(y), line_width(3){
+        init();
+    }
     layer(const color& bg, int x, int y, int width) :
         bg_clr(bg), res_x(x), res_y(y), line_width(width){
         init();
@@ -71,6 +78,12 @@ struct frame{
     frame(const color& bg){
         layers.emplace_back(bg, 600, 400, 3);
     }
+    frame(int x, int y){
+        layers.emplace_back(x, y);
+    }
+    frame(const color& bg, int x, int y){
+        layers.emplace_back(bg, x, y);
+    }
     frame(const color& bg, int x, int y, int width){
         layers.emplace_back(bg, x, y, width);
     }
@@ -81,13 +94,21 @@ struct camera{
     vec loc, size;
     frame image;
 
+    void draw_circle(circle c, int layer);
     void draw_circle(circle c);
+
+    void draw_line(line l, int layer);
     void draw_line(line l);
+
+    void write_text(textbox t, int layer);
+    void write_text(textbox t);
 
     camera() : loc({0,0,0}), size({6,4,0}), image(frame()){};
     camera(const color& bg) : loc({0,0,0}), size({6,4,0}), image(frame(bg)){};
     camera(const color& bg, const vec& s) 
         : loc({0,0,0}), size(s), image(frame(bg)){};
+    camera(const color& bg, const vec& s, int x, int y) 
+        : loc({0,0,0}), size(s), image(frame(bg, x, y)){};
 };
 
 // Function to create basic colored background

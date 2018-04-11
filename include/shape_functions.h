@@ -8,6 +8,7 @@
 #define SHAPE_FX_VIS
 
 #include "vec.h"
+#include "string"
 
 struct circle{
     vec loc;
@@ -32,6 +33,21 @@ struct line{
 
     line(const vec l1, const vec l2, const vec c) :
         loc1(l1), loc2(l2), color(c){};
+};
+
+struct textbox{
+    vec loc;
+    vec color;
+    double font_size = 1;
+    int justification = 0;
+    std::string text;
+
+    textbox(const std::string t, const vec l, const vec c) :
+            text(t), loc(l), color(c){};
+    textbox(const std::string t, const vec l, const vec c, double fs) :
+            text(t), loc(l), color(c), font_size(fs){};
+    textbox(const std::string t, const vec l, const vec c, double fs, int j) :
+            text(t), loc(l), color(c), font_size(fs), justification(j){};
 };
 
 #endif
